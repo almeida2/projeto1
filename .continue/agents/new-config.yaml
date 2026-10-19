@@ -1,0 +1,47 @@
+# This is an example configuration file
+# To learn more, see the full config.yaml reference: https://docs.continue.dev/reference
+
+name: Example Config
+version: 1.0.0
+schema: v1
+
+# 1. Regras globais do sistema (Custom Instructions)
+systemMessage: |
+  Sempre responda em português do Brasil.
+  Siga boas práticas de programação, Clean Code e padrões de arquitetura (como Spring Boot / Java).
+  Forneça explicações diretas, concisas e sem introduções desnecessárias.
+  Inclua tratamento de exceções e testes unitários quando relevante.
+
+# Define which models can be used
+# https://docs.continue.dev/customization/models
+models:
+  - name: my gpt-5
+    provider: openai
+    model: gpt-5
+    apiKey: YOUR_OPENAI_API_KEY_HERE
+  - name: qwen2.5-coder 7b
+    provider: ollama
+    model: qwen2.5-coder:7b
+    roles:
+      - apply
+      - autocomplete
+      - chat
+      - edit
+    # Reduz a janela de contexto para economizar VRAM
+    ollamaOptions:
+      num_ctx: 4096
+      num_thread: 8  # Defina o número de núcleos físicos da sua CPU
+  - name: Claude 4 Sonnet
+    provider: anthropic
+    model: claude-sonnet-4-20250514
+    apiKey: ${{ secrets.ANTHROPIC_API_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+    defaultCompletionOptions:
+      contextLength: 200000
+      maxTokens: 64000
+    capabilities:
+      - tool_use
+      - image_input
