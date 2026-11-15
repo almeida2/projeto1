@@ -1,28 +1,22 @@
 package com.fatec.projeto1;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
-import org.springframework.boot.jpa.test.autoconfigure.TestEntityManager;
-import org.springframework.boot.test.context.SpringBootTest;
+
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.validation.ConstraintViolationException;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import com.fatec.projeto1.model.Produto;
 import com.fatec.projeto1.repository.ProdutoRepository;
 import java.math.BigDecimal;
 
-@DataJpaTest 
+@DataJpaTest
 
 public class ProdutoRepositoryTest {
-    @Autowired
-    private TestEntityManager entityManager;
-   
+
     @Autowired
     private ProdutoRepository produtoRepository;
 
@@ -49,7 +43,6 @@ public class ProdutoRepositoryTest {
         assertThat(savedProduto.getPreco()).isEqualTo(new BigDecimal("19.99"));
         assertThat(savedProduto.getQuantidadeEstoque()).isEqualTo(10);
 
-       
     }
 
     @Test
@@ -64,10 +57,10 @@ public class ProdutoRepositoryTest {
 
         // Verifique se a validação de restrição é lançada
         assertThrows(ConstraintViolationException.class, () -> {
-            produtoRepository.save(produto);
+            produtoRepository.saveAndFlush(produto);
+
         });
 
-        //entityManager.getTransaction().commit();
     }
 
     @Test
@@ -85,7 +78,6 @@ public class ProdutoRepositoryTest {
             produtoRepository.save(produto);
         });
 
-       //entityManager.getTransaction().commit();
     }
 
     @Test
@@ -102,6 +94,5 @@ public class ProdutoRepositoryTest {
             produtoRepository.save(produto);
         });
 
-        //entityManager.getTransaction().commit();
     }
 }
